@@ -1,0 +1,128 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+android {
+    compileSdkVersion 29
+
+
+    defaultConfig {
+        minSdkVersion 19
+        versionCode versions.versionCode
+        versionName versions.versionName
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "androidx.appcompat:appcompat:${versions.appcompact}"
+    //implementation "rootProject.depsLibs.appcompact"
+}
+
+def siteUrl = 'https://github.com/liyuhaolol/HttpUtils'
+
+def gitUrl = 'https://github.com/liyuhaolol/HttpUtils.git'
+
+def libName = 'lib_https'
+
+group = "spa.lyh.cn"
+
+version = versions.versionName
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    //archives javadocJar
+    archives sourcesJar
+}
+
+install{
+    repositories.mavenInstaller{
+// This generates POM.xml with proper parameters
+        pom{
+            project{
+                packaging 'aar'
+                name 'Nice'
+                url siteUrl
+                licenses{
+                    license{
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                dependencies{
+                    dependency{
+                        groupId 'com.squareup.okhttp3'
+                        artifactId 'okhttp'
+                        version versions.okhttp
+                        scope 'api'
+                    }
+                    dependency{
+                        groupId 'com.alibaba'
+                        artifactId 'fastjson'
+                        version versions.fastjson
+                        scope 'implementation'
+                    }
+                    dependency{
+                        groupId 'spa.lyh.cn'
+                        artifactId 'lib_io'
+                        version versions.lib_io
+                        scope 'implementation'
+                    }
+                    dependency{
+                        groupId 'org.conscrypt'
+                        artifactId 'conscrypt-android'
+                        version versions.conscrypt
+                        scope 'implementation'
+                    }
+                }
+                developers{
+                    developer{
+                        id 'liyuhao'
+                        name 'liyuhao'
+                        email 'liyuhaoid@sina.com'
+                    }
+                }
+                scm{
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+
+bintray{
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        //userOrg = 'lehaha'
+        name = libName
+        desc = 'Nice'
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

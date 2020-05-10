@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="web_white">#FFFFFF</color>
+    <color name="web_white_night">#2B2B2B</color>
+    <color name="web_gray">#EEEEEE</color>
+    <color name="web_gray_night">#191919</color>
+    <color name="web_black">#000000</color>
+    <color name="web_black_night">#FFFFFF</color>
+</resources>
