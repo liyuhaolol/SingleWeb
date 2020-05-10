@@ -27,14 +27,14 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "androidx.appcompat:appcompat:${versions.appcompact}"
-    //implementation "rootProject.depsLibs.appcompact"
+    implementation "spa.lyh.cn:lib_utils:${versions.lib_utils}"
 }
 
-def siteUrl = 'https://github.com/liyuhaolol/HttpUtils'
+def siteUrl = 'https://github.com/liyuhaolol/SingleWeb'
 
-def gitUrl = 'https://github.com/liyuhaolol/HttpUtils.git'
+def gitUrl = 'https://github.com/liyuhaolol/SingleWeb.git'
 
-def libName = 'lib_https'
+def libName = 'ft_webview'
 
 group = "spa.lyh.cn"
 
@@ -66,27 +66,15 @@ install{
                 }
                 dependencies{
                     dependency{
-                        groupId 'com.squareup.okhttp3'
-                        artifactId 'okhttp'
-                        version versions.okhttp
-                        scope 'api'
-                    }
-                    dependency{
-                        groupId 'com.alibaba'
-                        artifactId 'fastjson'
-                        version versions.fastjson
+                        groupId 'androidx.appcompat'
+                        artifactId 'appcompat'
+                        version versions.appcompact
                         scope 'implementation'
                     }
                     dependency{
                         groupId 'spa.lyh.cn'
-                        artifactId 'lib_io'
-                        version versions.lib_io
-                        scope 'implementation'
-                    }
-                    dependency{
-                        groupId 'org.conscrypt'
-                        artifactId 'conscrypt-android'
-                        version versions.conscrypt
+                        artifactId 'lib_utils'
+                        version versions.lib_utils
                         scope 'implementation'
                     }
                 }

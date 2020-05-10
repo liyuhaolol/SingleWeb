@@ -29,7 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.app.SkinAppCompatDelegateImpl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
@@ -40,9 +39,10 @@ import java.util.List;
 
 import spa.lyh.cn.ft_webview.R;
 import spa.lyh.cn.lib_utils.PixelUtils;
-import spa.lyh.cn.lib_utils.statusbar.StatusBarFontColorControler;
-import spa.lyh.cn.share_sdk.interfaces.SharePlatformListener;
-import spa.lyh.cn.share_sdk.pop.ShareDialog;
+import spa.lyh.cn.lib_utils.translucent.BarUtils;
+import spa.lyh.cn.lib_utils.translucent.TranslucentUtils;
+import spa.lyh.cn.lib_utils.translucent.navbar.NavBarFontColorControler;
+import spa.lyh.cn.lib_utils.translucent.statusbar.StatusBarFontColorControler;
 
 
 /**
@@ -56,20 +56,19 @@ public class WebViewActivity extends AppCompatActivity{
     private WebView webView;
     private TextView title_tv;
     private ProgressBar progressBar;
-    //private ShareDialog shareDialog;
-    SharedPreferences sp_config;
+
+    private final static String dialog = "spa.lyh.cn.share_sdk.pop.ShareWebDialog";
+    private final static String listener = "spa.lyh.cn.share_sdk.interfaces.SharePlatformListener";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         //初始化布局
-        setTranslucent();
-        sp_config = getSharedPreferences("config", Context.MODE_PRIVATE);
-        StatusBarFontColorControler.setStatusBarMode(this,!isNightMode());
-        View status_bar = findViewById(R.id.status_bar);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelUtils.getStatusBarHeight(this));
-        status_bar.setLayoutParams(layoutParams);
+        TranslucentUtils.setTranslucentBoth(this);
+        StatusBarFontColorControler.setStatusBarMode(this,true);
+        NavBarFontColorControler.setNavBarMode(this,true);
+        BarUtils.autoFitBothBar(this,R.id.status_bar,R.id.nav_bar);
         //注册控件
         close = findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
@@ -108,15 +107,9 @@ public class WebViewActivity extends AppCompatActivity{
         //处理数据
         url = getIntent().getStringExtra("url");
         title = getIntent().getStringExtra("title");
-        if (TextUtils.isEmpty(title)){
-            share.setVisibility(View.GONE);
-        }
         initWebview();
         setWebviewClient();
         setWebChromeClient();
-
-
-
         //加载网页
         if (!TextUtils.isEmpty(url)){
             if (url.startsWith("http")){
@@ -127,39 +120,33 @@ public class WebViewActivity extends AppCompatActivity{
         }else {
             showToast("网页链接为空");
         }
+        checkShare();
+    }
+
+    private void checkShare(){
+        if (TextUtils.isEmpty(title)){
+            share.setVisibility(View.GONE);
+            return;
+        }
+        try{
+            Class.forName(dialog);
+        }catch (Exception e){
+            e.printStackTrace();
+            share.setVisibility(View.GONE);
+            Log.e("ft_webview","没有找到对应的分享模块：" + dialog);
+        }
     }
 
     /**
      * 显示分享
      */
     private void showShare() {
-        ShareDialog shareDialog = new ShareDialog(this,title,
-                new ArrayList<String>(),url);
-        shareDialog.setShareResultListener(new SharePlatformListener() {
-            @Override
-            public void onComplete() {
-                //Toastutils.showToast(getActivity(),"分享成功");
-                Toast.makeText(WebViewActivity.this,"分享成功",Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onError(String reason) {
-                //Toastutils.showToast(getActivity(),reason);
-                Toast.makeText(WebViewActivity.this,reason,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancel() {
-            }
-        });
-        shareDialog.show();
-        /*try{
-            Class clazz = Class.forName("spa.lyh.cn.share_sdk.pop.ShareDialog");
+        try{
+            Class clazz = Class.forName(dialog);
             Constructor constructor = clazz.getConstructor(Context.class,String.class, List.class,String.class);
             Object obj = constructor.newInstance(this,title,
                     new ArrayList<String>(),url);
-            Class clazz2 = Class.forName("spa.lyh.cn.share_sdk.interfaces.SharePlatformListener");
+            Class clazz2 = Class.forName(listener);
             ClassLoader loader = clazz2.getClassLoader();
             Object listener = Proxy.newProxyInstance(loader, new Class[]{clazz2}, new InvocationHandler() {
                 @Override
@@ -179,12 +166,13 @@ public class WebViewActivity extends AppCompatActivity{
             method.invoke(obj);
         }catch (Exception e){
             e.printStackTrace();
-        }*/
-
+        }
     }
 
     private void initWebview(){
         webView = findViewById(R.id.web);
+        webView.setHorizontalScrollBarEnabled(false);//水平不显示
+        webView.setVerticalScrollBarEnabled(false); //垂直不显示
         WebSettings webSettings = webView.getSettings();
         //屏蔽图片
         //webSettings.setBlockNetworkImage(true);
@@ -275,78 +263,11 @@ public class WebViewActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * 非纯色状态栏，比如用图片进入状态栏位置，使用这个方法。如果纯色状态栏使用这个方法，效果与上面一致，但是不再
-     * 兼容换肤框架，状态栏颜色需要手动控制。
-     */
-    private void setTranslucent(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-            setSystemUiVisibility(window.getDecorView(),View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
-
-    /**
-     * 设置显示的样式
-     * @param decorView
-     * @param visibility
-     */
-    private void setSystemUiVisibility(View decorView,int visibility){
-        setSystemUiVisibility(decorView,visibility,true);
-    }
-
-    /**
-     * 设置显示的样式
-     * @param decorView
-     * @param visibility
-     */
-    private void setSystemUiVisibility(View decorView,int visibility,boolean isAddVisibility){
-        int oldVis = decorView.getSystemUiVisibility();
-        int newVis = oldVis;
-        if (isAddVisibility){
-            newVis |= visibility;
-        }else {
-            newVis &= ~visibility;
-        }
-        if (newVis != oldVis) {
-            decorView.setSystemUiVisibility(newVis);
-        }
-    }
-
     private void showToast(String content){
         try{
             Toast.makeText(this,content,Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             e.printStackTrace();
-        }
-    }
-
-    @NonNull
-    @Override
-    public AppCompatDelegate getDelegate() {
-        return SkinAppCompatDelegateImpl.get(this, this);
-    }
-
-    public boolean isNightMode() {
-
-        int autoMode = sp_config.getInt("autoMode", 0);
-        int nightMode = sp_config.getInt("nightMode", 0);
-        if (nightMode == 1) {
-            return true;
-        } else if (nightMode == 2){
-            return false;
-        }else {
-            if (autoMode == 1) {
-                return true;
-            } else{
-                return false;
-            }
         }
     }
 }
