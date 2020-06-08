@@ -84,7 +84,12 @@ public class WebViewActivity extends AppCompatActivity{
                 if (!TextUtils.isEmpty(url)){
                     //有链接
                     ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData data = ClipData.newPlainText("url",webView.getUrl());
+                    ClipData data;
+                    if (!TextUtils.isEmpty(webView.getUrl())){
+                        data = ClipData.newPlainText("url",webView.getUrl());
+                    }else {
+                        data = ClipData.newPlainText("url",url);
+                    }
                     cmb.setPrimaryClip(data);
                     showToast("已复制到剪贴板");
                 }else {
