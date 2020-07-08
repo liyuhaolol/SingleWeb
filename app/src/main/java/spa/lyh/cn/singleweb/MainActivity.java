@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
                 intent.putExtra("url","https://iask.sina.com.cn/b/6324549.html");
-                //intent.putExtra("title",item.getAd().getUrl());
+                intent.putExtra("title","测试标题");
                 startActivity(intent);
             }
         });

@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import spa.lyh.cn.ft_webview.R;
+import spa.lyh.cn.ft_webview.webview.util.ShareUtil;
 import spa.lyh.cn.lib_utils.PixelUtils;
 import spa.lyh.cn.lib_utils.translucent.BarUtils;
 import spa.lyh.cn.lib_utils.translucent.TranslucentUtils;
@@ -56,9 +57,7 @@ public class WebViewActivity extends AppCompatActivity{
     private WebView webView;
     private TextView title_tv;
     private ProgressBar progressBar;
-
-    private final static String dialog = "spa.lyh.cn.share_sdk.pop.ShareWebDialog";
-    private final static String listener = "spa.lyh.cn.share_sdk.interfaces.SharePlatformListener";
+    private Object shareDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,6 +125,8 @@ public class WebViewActivity extends AppCompatActivity{
             showToast("网页链接为空");
         }
         checkShare();
+        shareDialog = ShareUtil.initShareDialog(this);
+        ShareUtil.registerResultListener(this,shareDialog);
     }
 
     private void checkShare(){
@@ -133,12 +134,8 @@ public class WebViewActivity extends AppCompatActivity{
             share.setVisibility(View.GONE);
             return;
         }
-        try{
-            Class.forName(dialog);
-        }catch (Exception e){
-            e.printStackTrace();
+        if (!ShareUtil.isActivited()){
             share.setVisibility(View.GONE);
-            Log.e("ft_webview","没有找到对应的分享模块：" + dialog);
         }
     }
 
@@ -146,32 +143,14 @@ public class WebViewActivity extends AppCompatActivity{
      * 显示分享
      */
     private void showShare() {
-        try{
-            Class clazz = Class.forName(dialog);
-            Constructor constructor = clazz.getConstructor(Context.class,String.class, List.class,String.class);
-            Object obj = constructor.newInstance(this,title,
-                    new ArrayList<String>(),url);
-            Class clazz2 = Class.forName(listener);
-            ClassLoader loader = clazz2.getClassLoader();
-            Object listener = Proxy.newProxyInstance(loader, new Class[]{clazz2}, new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                    if (method.getName().equals("onComplete")){
-                        Toast.makeText(WebViewActivity.this,"分享成功",Toast.LENGTH_SHORT).show();
-                    }else if (method.getName().equals("onError")){
-                        Toast.makeText(WebViewActivity.this,args[0].toString(),Toast.LENGTH_SHORT).show();
-                    }else if (method.getName().equals("onCancel")){
-                    }
-                    return null;
-                }
-            });
-            Method method2 = clazz.getMethod("setShareResultListener",clazz2);
-            method2.invoke(obj,listener);
-            Method method = clazz.getMethod("show");
-            method.invoke(obj);
-        }catch (Exception e){
-            e.printStackTrace();
+        String thisUrl;
+        if (!TextUtils.isEmpty(webView.getUrl())){
+            thisUrl = webView.getUrl();
+        }else {
+            thisUrl = url;
         }
+        ShareUtil.initWebPageShare(shareDialog,title,thisUrl,null);
+        ShareUtil.showDialog(shareDialog);
     }
 
     private void initWebview(){
