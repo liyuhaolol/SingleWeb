@@ -58,6 +58,7 @@ public class WebViewActivity extends AppCompatActivity{
     private TextView title_tv;
     private ProgressBar progressBar;
     private Object shareDialog;
+    private boolean isFirstCheck = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,7 +150,7 @@ public class WebViewActivity extends AppCompatActivity{
         }else {
             thisUrl = url;
         }
-        ShareUtil.initWebPageShare(shareDialog,title,thisUrl,null);
+        ShareUtil.initWebPageShare(shareDialog,title_tv.getText().toString(),thisUrl,null);
         ShareUtil.showDialog(shareDialog);
     }
 
@@ -218,9 +219,27 @@ public class WebViewActivity extends AppCompatActivity{
     private void setWebChromeClient(){
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
-            public void onReceivedTitle(WebView view, String title) {
-                if (!TextUtils.isEmpty(title)){
-                    title_tv.setText(title);
+            public void onReceivedTitle(WebView view, String newTitle) {
+                if (!TextUtils.isEmpty(newTitle)){
+                    if (!TextUtils.isEmpty(title)){
+                        if (isFirstCheck){
+                            //第一次设置标题
+                            if (!TextUtils.isEmpty(title)){
+                                title_tv.setText(title);
+                            }else {
+                                title_tv.setText(newTitle);
+                            }
+                            isFirstCheck = false;
+                        }else {
+                            title_tv.setText(newTitle);
+                        }
+                    }else {
+                        title_tv.setText(newTitle);
+                    }
+                }else {
+                    if (!TextUtils.isEmpty(title)){
+                        title_tv.setText(title);
+                    }
                 }
             }
 
