@@ -65,9 +65,9 @@ public class WebViewActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         //初始化布局
-        TranslucentUtils.setTranslucentBoth(this);
-        StatusBarFontColorControler.setStatusBarMode(this,true);
-        NavBarFontColorControler.setNavBarMode(this,true);
+        TranslucentUtils.setTranslucentBoth(getWindow());
+        StatusBarFontColorControler.setStatusBarMode(getWindow(),true);
+        NavBarFontColorControler.setNavBarMode(getWindow(),true);
         BarUtils.autoFitBothBar(this,R.id.status_bar,R.id.nav_bar);
         //注册控件
         close = findViewById(R.id.close);
