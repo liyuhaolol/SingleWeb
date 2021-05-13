@@ -25,6 +25,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //implementation "androidx.appcompat:appcompat:${versions.appcompact}"
+    implementation "androidx.appcompat:appcompat:${versions.appcompact}"
     implementation "com.github.liyuhaolol:CommonUtils:${versions.lib_utils}"
 }
