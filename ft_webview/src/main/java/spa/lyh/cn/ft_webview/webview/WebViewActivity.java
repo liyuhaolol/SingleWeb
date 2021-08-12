@@ -4,44 +4,28 @@ package spa.lyh.cn.ft_webview.webview;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.List;
 
 import spa.lyh.cn.ft_webview.R;
+import spa.lyh.cn.ft_webview.webview.base.BaseActivity;
 import spa.lyh.cn.ft_webview.webview.util.ShareUtil;
-import spa.lyh.cn.lib_utils.PixelUtils;
 import spa.lyh.cn.lib_utils.translucent.BarUtils;
 import spa.lyh.cn.lib_utils.translucent.TranslucentUtils;
+import spa.lyh.cn.lib_utils.translucent.listener.OnNavHeightListener;
 import spa.lyh.cn.lib_utils.translucent.navbar.NavBarFontColorControler;
 import spa.lyh.cn.lib_utils.translucent.statusbar.StatusBarFontColorControler;
 
@@ -50,7 +34,7 @@ import spa.lyh.cn.lib_utils.translucent.statusbar.StatusBarFontColorControler;
  * 作者：李宇昊
  * 作为转跳界面使用
  */
-public class WebViewActivity extends AppCompatActivity{
+public class WebViewActivity extends BaseActivity {
     private RelativeLayout copy,close,share;
     private String url;
     private String title;
@@ -68,7 +52,15 @@ public class WebViewActivity extends AppCompatActivity{
         TranslucentUtils.setTranslucentBoth(getWindow());
         StatusBarFontColorControler.setStatusBarMode(getWindow(),true);
         NavBarFontColorControler.setNavBarMode(getWindow(),true);
-        BarUtils.autoFitBothBar(this,R.id.status_bar,R.id.nav_bar);
+        BarUtils.autoFitStatusBar(this,R.id.status_bar);
+        BarUtils.NavbarHeightCallback(this, new OnNavHeightListener() {
+            @Override
+            public void getHeight(int height, int navbarType) {
+                if (navbarType == BarUtils.NORMAL_NAVIGATION){
+                    BarUtils.autoFitNavBar(WebViewActivity.this,R.id.nav_bar);
+                }
+            }
+        });
         //注册控件
         close = findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
@@ -91,9 +83,9 @@ public class WebViewActivity extends AppCompatActivity{
                         data = ClipData.newPlainText("url",url);
                     }
                     cmb.setPrimaryClip(data);
-                    showToast("已复制到剪贴板");
+                    showToast(getString(R.string.copy));
                 }else {
-                    showToast("没有链接数据");
+                    showToast(getString(R.string.no_url));
                 }
             }
         });
@@ -120,10 +112,10 @@ public class WebViewActivity extends AppCompatActivity{
             if (url.startsWith("http")){
                 webView.loadUrl(url);
             }else {
-                showToast("无效网页链接");
+                showToast(getString(R.string.wrong_url));
             }
         }else {
-            showToast("网页链接为空");
+            showToast(getString(R.string.no_url));
         }
         checkShare();
         shareDialog = ShareUtil.initShareDialog(this);

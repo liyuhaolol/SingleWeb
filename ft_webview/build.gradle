@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 30
@@ -27,4 +27,17 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:${versions.appcompact}"
     implementation "com.github.liyuhaolol:CommonUtils:${versions.lib_utils}"
+}
+
+afterEvaluate {
+    publishing {
+        publications{
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.liyuhaolol'
+                artifactId = 'SingleWeb'
+                version = versions.versionName
+            }
+        }
+    }
 }
