@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -53,14 +54,6 @@ public class WebViewActivity extends BaseActivity {
         StatusBarFontColorControler.setStatusBarMode(getWindow(),true);
         NavBarFontColorControler.setNavBarMode(getWindow(),true);
         BarUtils.autoFitStatusBar(this,R.id.status_bar);
-        BarUtils.NavbarHeightCallback(this, new OnNavHeightListener() {
-            @Override
-            public void getHeight(int height, int navbarType) {
-                if (navbarType == BarUtils.NORMAL_NAVIGATION){
-                    BarUtils.autoFitNavBar(WebViewActivity.this,R.id.nav_bar);
-                }
-            }
-        });
         //注册控件
         close = findViewById(R.id.close);
         close.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +113,30 @@ public class WebViewActivity extends BaseActivity {
         checkShare();
         shareDialog = ShareUtil.initShareDialog(this);
         ShareUtil.registerResultListener(this,shareDialog);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BarUtils.NavbarHeightCallback(this, new OnNavHeightListener() {
+            @Override
+            public void getHeight(int height, int navbarType) {
+                View navbarView = findViewById(R.id.nav_bar);
+                int oldHeight = navbarView.getMeasuredHeight();
+                if (oldHeight != height){
+                    //高度发生改变
+                    if (navbarType == BarUtils.NORMAL_NAVIGATION){
+                        ViewGroup.LayoutParams layoutParams = navbarView.getLayoutParams();
+                        layoutParams.height = height;
+                        navbarView.setLayoutParams(layoutParams);
+                    }else {
+                        ViewGroup.LayoutParams layoutParams = navbarView.getLayoutParams();
+                        layoutParams.height = 0;
+                        navbarView.setLayoutParams(layoutParams);
+                    }
+                }
+            }
+        });
     }
 
     private void checkShare(){
