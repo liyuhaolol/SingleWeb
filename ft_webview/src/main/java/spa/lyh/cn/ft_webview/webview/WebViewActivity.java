@@ -78,7 +78,7 @@ public class WebViewActivity extends BaseActivity {
                     cmb.setPrimaryClip(data);
                     showToast(getString(R.string.copy));
                 }else {
-                    showToast(getString(R.string.no_url));
+                    showToast(getString(R.string.no_web_url));
                 }
             }
         });
@@ -108,7 +108,7 @@ public class WebViewActivity extends BaseActivity {
                 showToast(getString(R.string.wrong_url));
             }
         }else {
-            showToast(getString(R.string.no_url));
+            showToast(getString(R.string.no_web_url));
         }
         checkShare();
         shareDialog = ShareUtil.initShareDialog(this);
