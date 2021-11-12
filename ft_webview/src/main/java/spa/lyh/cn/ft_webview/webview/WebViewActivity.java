@@ -4,12 +4,15 @@ package spa.lyh.cn.ft_webview.webview;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -198,7 +201,7 @@ public class WebViewActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //让系统不屏蔽混合内容和第三方Cookie
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
-            webSettings.setMixedContentMode(0);//永远允许
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);//永远允许
         }
     }
 
@@ -221,6 +224,12 @@ public class WebViewActivity extends BaseActivity {
 
                     webView.getSettings().setLoadsImagesAutomatically(true);
                 }*/
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                super.onReceivedSslError(view, handler, error);
+                Log.e("qwer","报错:"+error.toString());
             }
         });
     }
