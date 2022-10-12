@@ -142,6 +142,21 @@ public class WebViewActivity extends BaseActivity {
                 }
             }
         });
+        webView.onResume();
+        webView.resumeTimers();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        webView.onPause();
+        webView.pauseTimers();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        webView.destroy();
     }
 
     private void checkShare(){
@@ -297,4 +312,5 @@ public class WebViewActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
 }
