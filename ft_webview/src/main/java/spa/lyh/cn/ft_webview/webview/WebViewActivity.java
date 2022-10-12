@@ -47,11 +47,13 @@ public class WebViewActivity extends BaseActivity {
     private ProgressBar progressBar;
     private Object shareDialog;
     private boolean isFirstCheck = true;
+    private String ua;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
+        ua = getIntent().getExtras().getString("ua","");
         //初始化布局
         TranslucentUtils.setTranslucentBoth(getWindow());
         StatusBarFontColorControler.setStatusBarMode(getWindow(),true);
@@ -171,6 +173,10 @@ public class WebViewActivity extends BaseActivity {
         webView.setHorizontalScrollBarEnabled(false);//水平不显示
         webView.setVerticalScrollBarEnabled(false); //垂直不显示
         WebSettings webSettings = webView.getSettings();
+        if (!TextUtils.isEmpty(ua)){
+            //设置app的UA
+            webSettings.setUserAgentString(ua);
+        }
         //屏蔽图片
         //webSettings.setBlockNetworkImage(true);
         // 不支持缩放

@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 //intent.putExtra("url","https://www.xindb.com/static/content/TGGJ/2021-10-26/app_902595663328849920.html");
                 intent.putExtra("url","https://umsweb.offshoremedia.net/login");
                 intent.putExtra("title","测试标题");
+                intent.putExtra("ua","cnsAndroid");
                 startActivity(intent);
             }
         });
