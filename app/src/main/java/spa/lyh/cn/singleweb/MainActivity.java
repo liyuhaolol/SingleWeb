@@ -22,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                //intent.putExtra("url","https://iask.sina.com.cn/b/6324549.html");
+                intent.putExtra("url","https://news.cctv.com/2022/10/19/ARTI1GmPVo7xLsTqOqsEStTM221019.shtml?spm=C94212.P4YnMod9m2uD.ENPMkWvfnaiV.34");
                 //intent.putExtra("url","https://www.xindb.com/static/content/TGGJ/2021-10-26/app_902595663328849920.html");
-                intent.putExtra("url","https://umsweb.offshoremedia.net/login");
+                //intent.putExtra("url","https://umsweb.offshoremedia.net/login");
                 intent.putExtra("title","测试标题");
                 intent.putExtra("ua","cnsAndroid");
                 startActivity(intent);

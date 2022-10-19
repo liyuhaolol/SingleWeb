@@ -59,7 +59,7 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
-    <WebView
+    <spa.lyh.cn.ft_webview.webview.SingleWebView
         android:id="@+id/web"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
