@@ -42,7 +42,7 @@ public class WebViewActivity extends BaseActivity {
     private RelativeLayout copy,close,share;
     private String url;
     private String title;
-    private SingleWebView webView;
+    private SingleWebView2 webView;
     private TextView title_tv;
     private ProgressBar progressBar;
     private Object shareDialog;

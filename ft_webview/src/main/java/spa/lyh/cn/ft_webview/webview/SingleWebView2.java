@@ -1,41 +1,31 @@
 package spa.lyh.cn.ft_webview.webview;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Rect;
-import android.os.Build;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class SingleWebView extends WebView {
+public class SingleWebView2 extends WebView {
    private static final String CUSTOM_MENU_JS_INTERFACE = "CustomMenuJSInterface";
    private ActionMode mActionMode;
    private ActionSelectListener mActionSelectListener;
    private List<String> mCustomMenuList; //自定义添加的选项
 
 
-   public SingleWebView(@NonNull Context context) {
+   public SingleWebView2(@NonNull Context context) {
       this(context,null);
    }
 
-   public SingleWebView(@NonNull Context context, @Nullable AttributeSet attrs) {
+   public SingleWebView2(@NonNull Context context, @Nullable AttributeSet attrs) {
       this(context, attrs,0);
    }
 
-   public SingleWebView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+   public SingleWebView2(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
       super(context, attrs, defStyleAttr);
       //init();
    }

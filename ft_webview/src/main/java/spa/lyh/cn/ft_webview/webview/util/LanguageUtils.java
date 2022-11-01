@@ -1,6 +1,7 @@
 package spa.lyh.cn.ft_webview.webview.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import java.lang.reflect.Method;
 
@@ -20,7 +21,7 @@ public class LanguageUtils {
         }
     }
 
-    public static Context getLanguageContext(Context context){
+    public static Context attach(Context context) {
         Object obj;
         try{
             Class clazz = Class.forName(className);
@@ -28,7 +29,7 @@ public class LanguageUtils {
             obj = method.invoke(clazz,context);
             return (Context) obj;
         }catch (Exception ignored){
-            return null;
+            return context;
         }
     }
 }
