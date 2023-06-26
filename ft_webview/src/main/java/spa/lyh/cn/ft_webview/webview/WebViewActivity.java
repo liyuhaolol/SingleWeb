@@ -202,7 +202,6 @@ public class WebViewActivity extends BaseActivity {
         webSettings.setLoadWithOverviewMode(true);
 
         //使用缓存
-        webSettings.setAppCacheEnabled(true);
         webSettings.setAllowFileAccess(true);
         webSettings.setDatabaseEnabled(true);
 
