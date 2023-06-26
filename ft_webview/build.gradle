@@ -6,7 +6,7 @@ plugins{
 
 android {
     namespace 'spa.lyh.cn.ft_webview'
-    compileSdkVersion 34
+    compileSdkVersion 33
 
 
     defaultConfig {
@@ -33,6 +33,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
 }

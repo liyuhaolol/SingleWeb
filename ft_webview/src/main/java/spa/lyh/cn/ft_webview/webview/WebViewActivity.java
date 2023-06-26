@@ -42,7 +42,7 @@ public class WebViewActivity extends BaseActivity {
     private RelativeLayout copy,close,share;
     private String url;
     private String title;
-    private SingleWebView2 webView;
+    private SingleWebView webView;
     private TextView title_tv;
     private ProgressBar progressBar;
     private Object shareDialog;
@@ -105,6 +105,12 @@ public class WebViewActivity extends BaseActivity {
         initWebview();
         setWebviewClient();
         setWebChromeClient();
+        webView.setActionSelectListener(new SingleWebView.ActionSelectListener() {
+            @Override
+            public void onClick(String title, String selectText) {
+                Log.e("qwer","title:"+title+"  selectText:"+selectText);
+            }
+        });
         //加载网页
         if (!TextUtils.isEmpty(url)){
             if (url.startsWith("http")){

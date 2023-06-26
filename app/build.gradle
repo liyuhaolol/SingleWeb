@@ -4,12 +4,12 @@ plugins{
 }
 android {
     namespace 'spa.lyh.cn.singleweb'
-    compileSdkVersion 34
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "spa.lyh.cn.singleweb"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
@@ -27,6 +27,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
 }
