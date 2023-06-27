@@ -24,7 +24,8 @@ class MainActivity: AppCompatActivity(),OnClickListener {
         var intent:Intent
         when(p0?.id){
             R.id.tv ->{
-                intent = Intent(this,WebViewActivity::class.java)
+                intent = Intent(this,
+                    WebViewActivity::class.java)
                 intent.putExtra("url","https://news.cctv.com/2022/10/19/ARTI1GmPVo7xLsTqOqsEStTM221019.shtml?spm=C94212.P4YnMod9m2uD.ENPMkWvfnaiV.34")
                 intent.putExtra("title","测试标题")
                 intent.putExtra("ua","cnsAndroid")

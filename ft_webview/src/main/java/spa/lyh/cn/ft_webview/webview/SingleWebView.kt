@@ -15,6 +15,9 @@ import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 
+/**
+ * 注释的部分是actionmode，写着玩的，并没有啥实际作用
+ */
 open class SingleWebView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     WebView(context, attrs, defStyleAttr) {
     constructor(context: Context):this(context,null,0)
@@ -25,13 +28,13 @@ open class SingleWebView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         private val CUSTOM_MENU_JS_INTERFACE = "CustomMenuJSInterface"
     }
     private var mActionMode:ActionMode? = null
-    private var mActionSelectListener: ActionSelectListener? = null
+    //private var mActionSelectListener: ActionSelectListener? = null
     private lateinit var mCustomMenuList: MutableList<String> //自定义添加的选项
     init {
-        init()
+        //init()
     }
 
-    open fun setActionSelectListener(actionSelectListener:ActionSelectListener){
+/*    open fun setActionSelectListener(actionSelectListener:ActionSelectListener){
         this.mActionSelectListener = actionSelectListener
     }
 
@@ -158,6 +161,6 @@ open class SingleWebView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         fun callback(value:String,title:String){
             mActionSelectListener?.onClick(title,value)
         }
-    }
+    }*/
 
 }
