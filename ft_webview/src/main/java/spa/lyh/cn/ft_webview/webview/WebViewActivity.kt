@@ -36,7 +36,7 @@ class WebViewActivity:BaseActivity() {
         super.onCreate(savedInstanceState)
         b = ActivityWebviewBinding.inflate(layoutInflater)
         setContentView(b.root)
-        ua = intent.extras!!.getString("ua","")
+        ua = intent.getStringExtra("ua")?:""
         //初始化布局
         TranslucentUtils.setTranslucentBoth(window)
         StatusBarFontColorControler.setStatusBarMode(window, true)
@@ -70,8 +70,8 @@ class WebViewActivity:BaseActivity() {
         b.progressBar.progress = 0
         //处理数据
         //处理数据
-        url = intent.getStringExtra("url")!!
-        title = intent.getStringExtra("title")!!
+        url = intent.getStringExtra("url")?:""
+        title = intent.getStringExtra("title")?:""
         initWebview()
         setWebviewClient()
         setWebChromeClient()
