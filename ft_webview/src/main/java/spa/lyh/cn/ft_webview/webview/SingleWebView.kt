@@ -20,8 +20,9 @@ import android.webkit.WebView
  */
 open class SingleWebView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     WebView(context, attrs, defStyleAttr) {
-    constructor(context: Context):this(context,null,0)
-    constructor(context: Context,attrs: AttributeSet?):this(context,attrs,0)
+    //webview的style必须传android.R.attr.webViewStyle,否则webview工作会不正常
+    constructor(context: Context):this(context,null,android.R.attr.webViewStyle)
+    constructor(context: Context,attrs: AttributeSet?):this(context,attrs,android.R.attr.webViewStyle)
 
     companion object{
         @JvmStatic

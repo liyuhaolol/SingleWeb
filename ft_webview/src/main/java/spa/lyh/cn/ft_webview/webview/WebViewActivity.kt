@@ -6,6 +6,7 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.SslErrorHandler
@@ -15,6 +16,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import spa.lyh.cn.ft_webview.BuildConfig
 import spa.lyh.cn.ft_webview.R
 import spa.lyh.cn.ft_webview.databinding.ActivityWebviewBinding
 import spa.lyh.cn.ft_webview.webview.base.BaseActivity
@@ -68,7 +70,6 @@ class WebViewActivity:BaseActivity() {
             }
         })
         b.progressBar.progress = 0
-        //处理数据
         //处理数据
         url = intent.getStringExtra("url")?:""
         title = intent.getStringExtra("title")?:""
@@ -126,44 +127,36 @@ class WebViewActivity:BaseActivity() {
     }
 
     private fun initWebview() {
-        b.web.isHorizontalScrollBarEnabled = false //水平不显示
-        b.web.isVerticalScrollBarEnabled = false //垂直不显示
-        val webSettings: WebSettings = b.web.settings
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+        val settings: WebSettings = b.web.settings
         if (!TextUtils.isEmpty(ua)) {
             //设置app的UA
-            webSettings.setUserAgentString(ua)
+            settings.setUserAgentString(ua)
         }
-        //屏蔽图片
-        //webSettings.setBlockNetworkImage(true);
-        // 不支持缩放
-        webSettings.setSupportZoom(false)
-
-        // 自适应屏幕大小
-        webSettings.useWideViewPort = true
-        webSettings.loadWithOverviewMode = true
-
-        //使用缓存
-        webSettings.allowFileAccess = true
-        webSettings.databaseEnabled = true
-
-        //DOM Storage
-        webSettings.domStorageEnabled = true
-        webSettings.cacheMode = WebSettings.LOAD_DEFAULT
-
-        //启动对js的支持
-        webSettings.javaScriptEnabled = true
-        //启动Autoplay
-        //webSettings.setMediaPlaybackRequiresUserGesture(false);
-        //对图片大小适配
-        webSettings.useWideViewPort = true
-        //对文字大小适配
-        webSettings.loadWithOverviewMode = true
-        // 判断系统版本是不是5.0或之上
+        //支持大开js脚本
+        settings.javaScriptEnabled = true
+        settings.databaseEnabled = true
+        settings.domStorageEnabled = true
+        //允许缩放
+        settings.setSupportZoom(true)
+        //原网页基础上缩放
+        settings.builtInZoomControls = true
+        //支持js打开新窗口
+        settings.javaScriptCanOpenWindowsAutomatically = true
+        //任意比例缩放
+        settings.useWideViewPort = true
+        settings.loadWithOverviewMode = true
+        //解除数据阻止
+        settings.blockNetworkImage = false
+        //设置缓存
+        settings.cacheMode = WebSettings.LOAD_NO_CACHE
+        //隐藏放大按钮
+        settings.displayZoomControls = false
+        //settings.setTextZoom(200);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //让系统不屏蔽混合内容和第三方Cookie
-            CookieManager.getInstance().setAcceptThirdPartyCookies(b.web, true)
-            webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW //永远允许
+            settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
+        settings.setSupportMultipleWindows(false)
     }
 
     private fun setWebviewClient(){

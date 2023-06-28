@@ -27,8 +27,12 @@ class MainActivity: AppCompatActivity(),OnClickListener {
                 intent = Intent(this,
                     WebViewActivity::class.java)
                 intent.putExtra("url","https://news.cctv.com/2022/10/19/ARTI1GmPVo7xLsTqOqsEStTM221019.shtml?spm=C94212.P4YnMod9m2uD.ENPMkWvfnaiV.34")
+                //可以自定义第一次加载web的标题，并作为分享弹窗的触发条件之一。
+                //注：分享弹窗是配合其他项目使用的，所以本项目本身并不带有shareDialog。
+                //如果想启用这个功能只能按照我给出的shareDialog反射包名完全一致来写
+                //所以这个功能本质可能没啥用，对你来说。
                 intent.putExtra("title","测试标题")
-                intent.putExtra("ua","cnsAndroid")
+                intent.putExtra("ua","coolAndroid")
                 startActivity(intent)
             }
         }
