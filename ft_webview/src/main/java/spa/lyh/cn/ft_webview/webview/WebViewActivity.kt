@@ -6,9 +6,7 @@ import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
-import android.webkit.CookieManager
 import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -16,6 +14,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import spa.lyh.cn.ft_webview.BuildConfig
 import spa.lyh.cn.ft_webview.R
 import spa.lyh.cn.ft_webview.databinding.ActivityWebviewBinding
@@ -89,6 +88,16 @@ class WebViewActivity:BaseActivity() {
         checkShare()
         shareDialog = ShareUtil.initShareDialog(this)
         ShareUtil.registerResultListener(this, shareDialog)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (b.web.canGoBack()) {
+                    b.web.goBack()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     override fun onResume() {
@@ -248,14 +257,6 @@ class WebViewActivity:BaseActivity() {
         }
         ShareUtil.initWebPageShare(shareDialog, b.title.text.toString(), thisUrl, null)
         ShareUtil.showDialog(shareDialog)
-    }
-
-    override fun onBackPressed() {
-        if (b.web.canGoBack()) {
-            b.web.goBack()
-        } else {
-            onBackPressedDispatcher.onBackPressed()
-        }
     }
 
 
