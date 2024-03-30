@@ -25,7 +25,7 @@ import spa.lyh.cn.lib_utils.translucent.TranslucentUtils
 import spa.lyh.cn.lib_utils.translucent.navbar.NavBarFontColorControler
 import spa.lyh.cn.lib_utils.translucent.statusbar.StatusBarFontColorControler
 
-class WebViewActivity:BaseActivity() {
+open class WebViewActivity:BaseActivity() {
     private lateinit var b:ActivityWebviewBinding
     private var ua:String = ""
     private var url:String = ""
