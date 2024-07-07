@@ -9,7 +9,7 @@ plugins{
     id("net.thebugmc.gradle.sonatype-central-portal-publisher") version "1.2.3"
 }
 
-val versionName = "1.1.8"
+val versionName = "1.1.9"
 
 android {
     namespace = "spa.lyh.cn.ft_webview"
@@ -44,7 +44,7 @@ android {
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("io.github.liyuhaolol:CommonUtils:1.5.3")
+    implementation("io.github.liyuhaolol:CommonUtils:1.5.7")
 }
 
 var signingKeyId = ""//签名的密钥后8位
